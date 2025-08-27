@@ -1,33 +1,28 @@
-# for a description of available keys, see https://github.com/typst/packages/?tab=readme-ov-file#package-format
-
 [package]
-name = ""
+name = "articulate-coderscompass"
 version = "0.1.0"
 entrypoint = "src/lib.typ"
-authors = []
-license = "Unlicense"
+authors = ["Subhomoy Haldar <subhomoy@coderscompass.org>"]
+license = "MIT"
 description = ""
-homepage = ""
-repository = ""
-keywords = []
-categories = []
+homepage = "https://coderscompass.org"
+repository = "https://github.com/Coders-Compass/articulate-coderscompass"
+keywords = ["typst", "coderscompass", "article", "paper"]
+categories = ["paper"]
 disciplines = []
 # compiler = ""
 exclude = [
-  ".github",
-  "docs",
-  "scripts",
-  "tests",
-  ".typstignore",
-  "Justfile",
-  "thumbnail-dark.svg",
-  "thumbnail-light.svg",
+    ".github",
+    "docs",
+    "scripts",
+    "tests",
+    ".typstignore",
+    "Justfile",
+    "assets/images/page-1.svg",
+    "assets/images/page-2.svg",
 ]
 
-# [template]
-# path = "template"
-# entrypoint = "main.typ"
-# thumbnail = "thumbnail.png"
-
-# [tool.mytool]
-# foo = "bar"
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "assets/images/page-1.svg"
