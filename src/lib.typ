@@ -1,4 +1,6 @@
 #import "@preview/zebraw:0.5.5": zebraw, zebraw-init, zebraw-themes
+#import "@preview/cmarker:0.1.6"
+#import "@preview/mitex:0.2.5": mitex
 
 // --------------------------------------------------------------
 // Shared constants for the article template and helper functions
@@ -68,7 +70,7 @@
   bibliography: none,
 
   /// Name of the publication or journal where the paper is published. Optional.
-  publication: "Coders' Compass Writing",
+  publication: "Coders' Compass Texts",
 
   // Design configs that can be overriden.
   // These are optional and can be used to customise the appearance of the document.
@@ -267,7 +269,7 @@
 
   // Title block with Coders' Compass logo, title, and optional subtitle
   align(center)[
-    #image("assets/images/cc-icon.png", width: 1cm)
+    #image("../assets/images/cc-icon.png", width: 1cm)
     // #v(1em)
     #block(
       text(
@@ -388,4 +390,42 @@
     #v(0.2em)
     #body
   ]
+}
+
+/// cc-quote overrides the default quote rendering to add a custom style for
+/// block quotes. Matches the styling used for callouts.
+/// It takes the same parameters as the default quote function.
+/// -> content
+#let cc-quote(block: false, attribution: none, ..body) = {
+  if not block {
+    // Handle inline quotes normally
+    return quote(block: block, attribution: attribution, ..body)
+  }
+
+  let colour = rgb(ccAccentBlue)
+  let content = body.pos().join()
+
+  return rect(
+    width: 100%,
+    fill: colour.lighten(95%),
+    stroke: (left: 3pt + colour),
+    inset: 1em,
+    radius: blockRadiusValue,
+  )[
+    #content
+  ]
+}
+
+/// render-markdown renders markdown content with support for
+/// callout boxes using the quote function. It uses cmarker's
+/// rendering capabilities with math support via mitex.
+/// -> content
+#let render-markdown(markdown-content) = {
+  cmarker.render(
+    markdown-content,
+    math: mitex,
+    scope: (
+      quote: cc-quote
+    )
+  )
 }

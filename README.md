@@ -1,18 +1,17 @@
-# The `my-package` Package
+# The `articulate-coderscompass` Package
 <div align="center">Version 0.1.0</div>
 
-A short description about the project and/or client.
+Template for a two column article layout for the [Coders' Compass website](https://coderscompass.org). It allows users to write articles in markdown or Typst, which can then be rendered to a PDF suitable for print.
+Uses Coders' Compass branding and styling.
 
 ## Template adaptation checklist
 
 - [ ] Fill out `README.md`
   - Change the `my-package` package name, including code snippets
   - Check section contents and/or delete sections that don't apply
-- [ ] Check and/or replace `LICENSE` by something that suits your needs
-- [ ] Fill out `typst.toml`
+- [x] Check and/or replace `LICENSE` by something that suits your needs
+- [x] Fill out `typst.toml`
   - See also the [typst/packages README](https://github.com/typst/packages/?tab=readme-ov-file#package-format)
-- [ ] Adapt Repository URLs in `CHANGELOG.md`
-  - Consider only committing that file with your first release, or removing the "Initial Release" part in the beginning
 - [ ] Adapt or deactivate the release workflow in `.github/workflows/release.yml`
   - to deactivate it, delete that file or remove/comment out lines 2-4 (`on:` and following)
   - to use the workflow
@@ -27,43 +26,68 @@ A short description about the project and/or client.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on the typst web app. Perhaps a short code example on importing the package and a very simple teaser usage.
+1. Start with the [main.typ](template/main.typ) file which imports the `articulate-coderscompass` package and demonstrates its usage.
+2. Open it in the [Typst Web App](https://typst.app) or use the [Typst CLI](https://github.com/typst/typst) to render it.
 
-```typ
-#import "@preview/my-package:0.1.0": *
-
-#show: my-show-rule.with()
-#my-func()
-```
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./thumbnail-dark.svg">
-  <img src="./thumbnail-light.svg">
-</picture>
-
-### Installation
-
-A step by step guide that will tell you how to get the development environment up and running. This should explain how to clone the repo and where to (maybe a link to the typst documentation on it), along with any pre-requisite software and installation steps.
-
-```
-$ First step
-$ Another step
-$ Final step
-```
+![Page 1 Preview](assets/images/page-1.svg)
+![Page 2 Preview](assets/images/page-2.svg)
 
 ## Usage
 
-A more in-depth description of usage. Any template arguments? A complicated example that showcases most if not all of the functions the package provides? This is also an excellent place to signpost the manual.
+```typst
+#import "@preview/articulate-coderscompass:0.1.0": *
 
-```typ
-#import "@preview/my-package:0.1.0": *
+#show: articulate-coderscompass.with(
+  title: lorem(15),
+  subtitle: lorem(10),
+  authors: (
+    (name: "First Author", email: "first@coderscompass.org", affiliation: "Coders' Compass"),
+    (name: "Second Author", email: "second@coderscompass.org", affiliation: "Coders' Compass"),
+    // (name: "Third Author", email: "third@coderscompass.org", affiliation: "Coders' Compass"),
+  ),
+  abstract: [
+    #lorem(40)
+  ],
+  keywords: (
+    "keyword1",
+    "keyword2",
+    "keyword3",
+  ),
+  version: "1.0.0",
+  reading-time: "6 minutes",
+  date: datetime.today(),
+  bibliography: bibliography("refs.bib", style: "institute-of-electrical-and-electronics-engineers")
+)
 
-#let my-complicated-example = ...
+#render-markdown(read("content.md"))
+
+// Or write Typst directly
+
+= Article Title
+
+Content here.
+
 ```
 
-## Additional Documentation and Acknowledgments
+Refer to the [manual](docs/manual.pdf) for detailed documentation on available features and customization options.
 
-* Project folder on server:
-* Confluence link:
-* Asana board:
-* etc...
+You don't have to use the `render-markdown` function. Write Typst directly if you prefer. The reason we use markdown is to have a single manuscript source which can be rendered to both HTML (for the website) and PDF (for print).
+
+## Development
+
+Convenience commands for developers and contributors to compile the template, generate the manual, and create thumbnail images.
+
+```bash
+# Compiling the template
+typst c template/main.typ
+
+# Generating the manual
+typst c src/manual.typ docs/manual.pdf
+
+# Thumbnail images
+typst c template/main.typ --format=png assets/images/page-{p}.png
+typst c template/main.typ --format=svg assets/images/page-{p}.svg
+
+# Running tests with tytanic
+
+```
