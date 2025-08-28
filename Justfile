@@ -9,8 +9,8 @@ default:
 # generate manual
 doc:
   typst compile src/manual.typ docs/manual.pdf
-  typst compile template/main.typ --format=png assets/images/page-{p}.png
-  typst compile template/main.typ --format=svg assets/images/page-{p}.svg
+  typst compile template/thumbnail.typ --format=png assets/images/page-{p}.png
+  typst compile template/thumbnail.typ --format=svg assets/images/page-{p}.svg
 
 # run test suite
 test *args:
