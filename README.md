@@ -1,5 +1,5 @@
 # The `articulate-coderscompass` Package
-<div align="center">Version 0.1.1</div>
+<div align="center">Version 0.1.2</div>
 
 Template for a two column article layout for the [Coders' Compass website](https://coderscompass.org). It allows users to write articles in markdown or Typst, which can then be rendered to a PDF suitable for print.
 
@@ -16,7 +16,7 @@ Uses Coders' Compass branding and styling.
 ## Usage
 
 ```typst
-#import "@preview/articulate-coderscompass:0.1.0": *
+#import "@preview/articulate-coderscompass:0.1.2": *
 
 #show: articulate-coderscompass.with(
   title: lorem(15),
