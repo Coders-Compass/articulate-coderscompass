@@ -2,6 +2,7 @@
 <div align="center">Version 0.1.0</div>
 
 Template for a two column article layout for the [Coders' Compass website](https://coderscompass.org). It allows users to write articles in markdown or Typst, which can then be rendered to a PDF suitable for print.
+
 Uses Coders' Compass branding and styling.
 
 ## Template adaptation checklist
@@ -89,5 +90,16 @@ typst c template/main.typ --format=png assets/images/page-{p}.png
 typst c template/main.typ --format=svg assets/images/page-{p}.svg
 
 # Running tests with tytanic
-
+tt run
+tt run test1
+tt run unit1
 ```
+
+Remember to copy any changes to `template/main.typ` to the test case in `tests/test1/test.typ`. Also ensure that the contents file is copied over.
+
+## License
+
+This project is **partially** licensed under the [MIT License](LICENSE). This includes all code files and the documentation (manual).
+Only exception: the Coders' Compass branding assets, specifically the [logo](assets/images/cc-icon.png).
+
+All rights reserved to Coders' Compass for the branding assets (logo).
