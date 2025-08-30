@@ -10,8 +10,8 @@ Uses Coders' Compass branding and styling.
 1. Start with the [main.typ](template/main.typ) file which imports the `articulate-coderscompass` package and demonstrates its usage.
 2. Open it in the [Typst Web App](https://typst.app) or use the [Typst CLI](https://github.com/typst/typst) to render it.
 
-![Page 1 Preview](assets/images/page-1.svg)
-![Page 2 Preview](assets/images/page-2.svg)
+![Page 1 Preview](assets/images/page-1.png)
+![Page 2 Preview](assets/images/page-2.png)
 
 ## Usage
 
@@ -79,7 +79,18 @@ Remember to copy any changes to `template/main.typ` to the test case in `tests/t
 
 ## License
 
-This project is **partially** licensed under the [MIT License](LICENSE). This includes all code files and the documentation (manual).
-Only exception: the Coders' Compass branding assets, specifically the [logo](assets/images/cc-icon.png).
+This project is **mostly** licensed under the [MIT License](LICENSE). This includes _all code files_ and the _documentation (manual)_.
 
-All rights reserved to Coders' Compass for the branding assets (logo).
+Only exception: the Coders' Compass branding assets, specifically the [logo](assets/images/cc-icon.png). All rights reserved on the branding assets (logo), Coders' Compass.
+
+## Acknowledgements
+
+- [Typst](https://typst.app) - The typesetting system powering this package.
+  - [cmarker](https://typst.app/universe/package/cmarker/) - Handles markdown rendering.
+  - [mitex](https://typst.app/universe/package/mitex) - LaTeX math rendering support.
+  - [zebraw](https://typst.app/universe/package/zebraw) - Robust syntax highlighting for code blocks.
+  - [tidy](https://typst.app/universe/package/tidy) - Documentation generation.
+
+## Contact
+
+For questions, or suggestions, please reach out to the [Coders' Compass team](https://coderscompass.org/contact/).
