@@ -5,6 +5,8 @@ Template for a two column article layout for the [Coders' Compass website](https
 
 Uses Coders' Compass branding and styling.
 
+![Articulate by Coders' Compass](assets/images/articulate-open-graph.png)
+
 ## Getting Started
 
 1. Start with the [main.typ](template/main.typ) file which imports the `articulate-coderscompass` package and demonstrates its usage.
