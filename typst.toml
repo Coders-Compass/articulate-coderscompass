@@ -20,6 +20,8 @@ exclude = [
     "Justfile",
     "assets/images/page-1.svg",
     "assets/images/page-2.svg",
+    "assets/images/page-3.svg",
+    "assets/images/page-4.svg",
 ]
 
 [template]
