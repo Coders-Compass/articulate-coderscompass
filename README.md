@@ -93,6 +93,9 @@ Only exception: the Coders' Compass branding assets, specifically the [logo](ass
   - [zebraw](https://typst.app/universe/package/zebraw) - Robust syntax highlighting for code blocks.
   - [tidy](https://typst.app/universe/package/tidy) - Documentation generation.
 
+- [Typst Package Template](https://github.com/typst-community/typst-package-template) - Template for creating Typst packages.
+- [tytanic](https://github.com/typst-community/tytanic) - Test runner for Typst projects.
+
 ## Contact
 
 For questions, or suggestions, please reach out to the [Coders' Compass team](https://coderscompass.org/contact/).
