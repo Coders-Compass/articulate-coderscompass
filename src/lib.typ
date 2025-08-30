@@ -6,15 +6,15 @@
 // Shared constants for the article template and helper functions
 // --------------------------------------------------------------
 
-#let ccPrimaryYellow = "#f8d7b0"
-#let ccSecondaryBrown = "#392518"
-#let ccAccentBlue = "#7bd4ff"
-#let ccLighterBlue = "#cceeff"
-#let ccAccentGreen = "#90ee90"
-#let ccLightGrey = "#666666"
-#let ccDividerGrey = "#dddddd"
-#let ccCodeBackground = "#f8f9fa"
-#let blockRadiusValue = 2pt
+#let cc-primary-yellow = "#f8d7b0"
+#let cc-secondary-brown = "#392518"
+#let cc-accent-blue = "#7bd4ff"
+#let cc-lighter-blue = "#cceeff"
+#let cc-accent-green = "#90ee90"
+#let cc-light-grey = "#666666"
+#let cc-divider-grey = "#dddddd"
+#let cc-code-background = "#f8f9fa"
+#let block-radius-value = 2pt
 
 
 // ------------------------------------------------
@@ -123,39 +123,39 @@
       align: (left, right),
       gutter: 1em,
       [
-        #text(size: 0.8em, weight: "semibold", fill: rgb(ccSecondaryBrown))[
+        #text(size: 0.8em, weight: "semibold", fill: rgb(cc-secondary-brown))[
           #publication
         ]
       ],
       [
-        #text(size: 0.8em, style: "italic", fill: rgb(ccSecondaryBrown))[
+        #text(size: 0.8em, style: "italic", fill: rgb(cc-secondary-brown))[
           #short-title
         ]
       ],
     )
-    line(length: 100%, stroke: 0.5pt + rgb(ccDividerGrey))
+    line(length: 100%, stroke: 0.5pt + rgb(cc-divider-grey))
   }
 
   // The first page header is an article metadata bar
   let article-metadata() = {
     rect(
         width: 100%,
-        fill: rgb(ccPrimaryYellow),
-        stroke: rgb(ccSecondaryBrown),
+        fill: rgb(cc-primary-yellow),
+        stroke: rgb(cc-secondary-brown),
         inset: .6em,
-        radius: blockRadiusValue
+        radius: block-radius-value
     )[
       #grid(
         columns: (1fr, auto),
         gutter: 1em,
         [
-          #text(size: 0.9em, fill: rgb(ccSecondaryBrown))[
+          #text(size: 0.9em, fill: rgb(cc-secondary-brown))[
             *Category:* Article
             #if reading-time != none [ • *Reading time:* #reading-time ]
           ]
         ],
         [
-          #text(size: 0.9em, fill: rgb(ccSecondaryBrown))[
+          #text(size: 0.9em, fill: rgb(cc-secondary-brown))[
             #date.display("[day] [month repr:long] [year]")
           ]
         ]
@@ -186,13 +186,13 @@
       ""
     }
 
-    line(length: 100%, stroke: 0.5pt + rgb(ccDividerGrey))
+    line(length: 100%, stroke: 0.5pt + rgb(cc-divider-grey))
     grid(
       columns: (1fr, auto, 1fr),
       align: (left, center, right),
       gutter: 1em,
       [
-        #text(size: 0.8em, fill: rgb(ccLightGrey))[
+        #text(size: 0.8em, fill: rgb(cc-light-grey))[
           #author-text
         ]
       ],
@@ -200,7 +200,7 @@
         #context counter(page).get().first()
       ],
       [
-        #text(size: 0.7em, fill: rgb(ccLightGrey), style: "italic")[
+        #text(size: 0.7em, fill: rgb(cc-light-grey), style: "italic")[
           #if watermark != none [
               #watermark
           ] else [
@@ -287,7 +287,7 @@
       #block(text(
         weight: "medium",
         size: 1.4em,
-        fill: rgb(ccLightGrey),
+        fill: rgb(cc-light-grey),
         subtitle
       ))
     ]
@@ -315,10 +315,10 @@
   if abstract != none {
     rect(
       width: 100%,
-      fill: rgb(ccLighterBlue),
-      stroke: (left: 3pt + rgb(ccAccentBlue)),
+      fill: rgb(cc-lighter-blue),
+      stroke: (left: 3pt + rgb(cc-accent-blue)),
       inset: 1.2em,
-      radius: blockRadiusValue,
+      radius: block-radius-value,
     )[
       #set par(justify: true)
       #heading(outlined: false, numbering: none, text(0.85em)[Abstract])
@@ -326,13 +326,13 @@
       // Keywords (if provided)
       #if keywords.len() > 0 {
         v(1em)
-        text(size: 10pt, fill: rgb(ccLightGrey))[
+        text(size: 10pt, fill: rgb(cc-light-grey))[
           *Keywords:* #keywords.join(", ")
         ]
       }
 
       // The website URL
-      #text(size: 0.9em, fill: rgb(ccLightGrey))[
+      #text(size: 0.9em, fill: rgb(cc-light-grey))[
         *Latest Version:* #link(website-url)[#website-url]
       ]
     ]
@@ -349,7 +349,7 @@
 
   // Bibliography section if provided
   if bibliography != none {
-    line(length: 100%, stroke: 0.5pt + rgb(ccDividerGrey))
+    line(length: 100%, stroke: 0.5pt + rgb(cc-divider-grey))
     bibliography
   }
 }
@@ -369,7 +369,7 @@
   /// The icon to display in the callout box. Optional.
   icon: emoji.notepad,
   /// The color of the callout box. Optional, defaults to Coders' Compass accent blue.
-  color: rgb(ccAccentBlue),
+  color: rgb(cc-accent-blue),
   /// The body content of the callout box. This is required.
   body
 ) = {
@@ -378,7 +378,7 @@
     fill: color.lighten(95%),
     stroke: (left: 3pt + color),
     inset: 1em,
-    radius: blockRadiusValue,
+    radius: block-radius-value,
   )[
     #text(
       weight: "semibold",
@@ -402,7 +402,7 @@
     return quote(block: block, attribution: attribution, ..body)
   }
 
-  let colour = rgb(ccAccentBlue)
+  let colour = rgb(cc-accent-blue)
   let content = body.pos().join()
 
   return rect(
@@ -410,7 +410,7 @@
     fill: colour.lighten(95%),
     stroke: (left: 3pt + colour),
     inset: 1em,
-    radius: blockRadiusValue,
+    radius: block-radius-value,
   )[
     #content
   ]

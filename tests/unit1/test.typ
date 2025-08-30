@@ -1,15 +1,15 @@
 #import "/src/lib.typ": *
 
 // Test 1: Color constants are correctly defined
-#assert.eq(ccPrimaryYellow, "#f8d7b0")
-#assert.eq(ccSecondaryBrown, "#392518")
-#assert.eq(ccAccentBlue, "#7bd4ff")
-#assert.eq(ccLighterBlue, "#cceeff")
-#assert.eq(ccAccentGreen, "#90ee90")
-#assert.eq(ccLightGrey, "#666666")
-#assert.eq(ccDividerGrey, "#dddddd")
-#assert.eq(ccCodeBackground, "#f8f9fa")
-#assert.eq(blockRadiusValue, 2pt)
+#assert.eq(cc-primary-yellow, "#f8d7b0")
+#assert.eq(cc-secondary-brown, "#392518")
+#assert.eq(cc-accent-blue, "#7bd4ff")
+#assert.eq(cc-lighter-blue, "#cceeff")
+#assert.eq(cc-accent-green, "#90ee90")
+#assert.eq(cc-light-grey, "#666666")
+#assert.eq(cc-divider-grey, "#dddddd")
+#assert.eq(cc-code-background, "#f8f9fa")
+#assert.eq(block-radius-value, 2pt)
 
 // Test 2: Functions return content (smoke tests)
 #let result = callout[This is a test callout]
@@ -100,9 +100,9 @@
 
 // Test 11: Color conversion functionality
 // Verify colors can be converted to rgb type
-#let primary_rgb = rgb(ccPrimaryYellow)
-#let secondary_rgb = rgb(ccSecondaryBrown)
-#let accent_rgb = rgb(ccAccentBlue)
+#let primary_rgb = rgb(cc-primary-yellow)
+#let secondary_rgb = rgb(cc-secondary-brown)
+#let accent_rgb = rgb(cc-accent-blue)
 
 #assert.ne(primary_rgb, none)
 #assert.ne(secondary_rgb, none)
