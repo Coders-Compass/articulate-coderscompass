@@ -58,6 +58,12 @@ You don't have to use the `render-markdown` function. Write Typst directly if yo
 
 ## Development
 
+Follow the instructions in the official [Typst package repository](https://github.com/typst/packages?tab=readme-ov-file#local-packages) to symlink this package for local development. On MacOS this is what I use:
+
+```bash
+ln -s ~/path/to/articulate-coderscompass ~/Library/Application\ Support/typst/packages/preview/articulate-coderscompass/<current-version>
+```
+
 Convenience commands for developers and contributors to compile the template, generate the manual, and create thumbnail images.
 
 ```bash
@@ -65,11 +71,10 @@ Convenience commands for developers and contributors to compile the template, ge
 typst c template/main.typ
 
 # Generating the manual
-typst c src/manual.typ docs/manual.pdf
+typst c docs/manual.typ docs/manual.pdf --root .
 
 # Thumbnail images
-typst c template/main.typ --format=png assets/images/page-{p}.png
-typst c template/main.typ --format=svg assets/images/page-{p}.svg
+typst c docs/thumbnail.typ --format=png assets/images/page-{p}.png --root .
 
 # Running tests with tytanic
 tt run

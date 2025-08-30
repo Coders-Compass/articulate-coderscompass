@@ -19,7 +19,7 @@
   version: "1.0.0",
   reading-time: "6 minutes",
   date: datetime.today(),
-  bibliography: bibliography("refs.bib", style: "institute-of-electrical-and-electronics-engineers")
+  bibliography: bibliography("../template/refs.bib", style: "institute-of-electrical-and-electronics-engineers")
 )
 
-#render-markdown(read("content.md"))
+#render-markdown(read("../template/content.md"))
