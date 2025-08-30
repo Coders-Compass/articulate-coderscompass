@@ -1,4 +1,4 @@
-#import "@preview/articulate-coderscompass:0.1.2": articulate-coderscompass, render-markdown
+#import "@preview/articulate-coderscompass:0.1.4": articulate-coderscompass, render-markdown
 
 #show: articulate-coderscompass.with(
   title: lorem(15),

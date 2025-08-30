@@ -1,6 +1,6 @@
 [package]
 name = "articulate-coderscompass"
-version = "0.1.2"
+version = "0.1.4"
 entrypoint = "src/lib.typ"
 authors = ["Subhomoy Haldar <subhomoy@coderscompass.org>"]
 license = "MIT"
