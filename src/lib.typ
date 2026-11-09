@@ -222,7 +222,10 @@
     header: header(),
     footer: footer(),
     paper: "a4",
+    // Page columns, not the columns function: only page columns take full-width floats such as wide images.
+    columns: 2,
   )
+  set columns(gutter: 1.3em)
 
   // Main font for the document
   set text(font: regularFont, lang: "en")
@@ -236,6 +239,8 @@
   show heading: set text(
     font: headingFont,
   )
+  // Ultra has no Greek. Regular Libertinus looks thin beside it, bold sits closer.
+  show heading: it => { show regex("\p{Greek}+"): set text(weight: "bold"); it }
 
   set heading(
     numbering: "1.1.",
@@ -243,6 +248,8 @@
 
   show heading: it => {
     set text(font: headingFont)
+    // Justified headings hyphenate ("Re-versals") or gape once hyphenation is off. Ragged right does neither.
+    set par(justify: false)
     it
     v(0.5em)
   }
@@ -263,87 +270,103 @@
   )
   show raw.where(block: true): it => {
     v(1.2em)
-    zebraw(
-      it
-    )
+    // zebraw sets its language tab on a line of its own, which a column break can strand. A sticky block keeps it with the code.
+    if it.lang != none {
+      let tab = box(
+        inset: 0.34em,
+        outset: (bottom: 0.34em),
+        radius: (top: 0.34em),
+        fill: zebraw-themes.zebra-reverse.comment-color,
+        text(bottom-edge: "bounds", it.lang),
+      )
+      context v(-measure(tab).height)
+      block(sticky: true, below: 0pt, width: 100%, align(right, tab))
+    }
+    zebraw(it, lang: false)
   }
 
   // -------------------------------------
   // Main content of the paper starts here
   // -------------------------------------
 
-  // Title block with Coders' Compass logo, title, and optional subtitle
-  align(center)[
-    #image("../assets/images/cc-icon.png", width: 1cm, alt: "Coders' Compass logo")
-    // #v(1em)
-    #block(std.title(text(font: headingFont, size: 24pt, weight: "regular", title)))
-  ]
-
-  // Subtitle (if provided)
-  if subtitle != none {
-    v(0.5em)
+  place(top, float: true, scope: "parent", clearance: 1.2em, {
+    // Title block with Coders' Compass logo, title, and optional subtitle
     align(center)[
-      #block(text(
-        weight: "medium",
-        size: 1.4em,
-        fill: rgb(cc-light-grey),
-        subtitle
-      ))
+      #image("../assets/images/cc-icon.png", width: 1cm, alt: "Coders' Compass logo")
+      // #v(1em)
+      #show regex("\p{Greek}+"): set text(weight: "bold")
+      #block(std.title(text(font: headingFont, size: 24pt, weight: "regular", title)))
     ]
-  }
 
-  // Author information.
-  pad(
-    top: 0.5em,
-    x: 2em,
-    grid(
-      columns: (1fr,) * calc.min(3, authors.len()),
-      gutter: 1em,
-      ..authors.map(author => align(center)[
+    // Subtitle (if provided)
+    if subtitle != none {
+      v(0.5em)
+      align(center)[
         #block(text(
-          weight: "semibold",
-          author.name
+          weight: "medium",
+          size: 1.4em,
+          fill: rgb(cc-light-grey),
+          subtitle
         ))
-        #text(size: .8em, author.email) \
-        #text(size: .8em, author.affiliation)
-      ]),
-    ),
-  )
-
-  // Abstract (if provided)
-  if abstract != none {
-    rect(
-      width: 100%,
-      fill: rgb(cc-lighter-blue),
-      stroke: (left: 3pt + rgb(cc-accent-blue)),
-      inset: 1.2em,
-      radius: block-radius-value,
-    )[
-      #set par(justify: true)
-      #heading(outlined: false, numbering: none, text(0.85em)[Abstract])
-      #abstract
-      // Keywords (if provided)
-      #if keywords.len() > 0 {
-        v(1em)
-        text(size: 10pt, fill: rgb(cc-light-grey))[
-          *Keywords:* #keywords.join(", ")
-        ]
-      }
-
-      // The website URL
-      #text(size: 0.9em, fill: rgb(cc-light-grey))[
-        // Justifying a long unbreakable URL leaves wide gaps in the line before it.
-        #set par(justify: false)
-        *Latest Version:* #link(website-url)[#website-url]
       ]
-    ]
-    v(0.5em)
-  }
+    }
 
+    // Author information.
+    pad(
+      top: 0.5em,
+      x: 2em,
+      grid(
+        columns: (1fr,) * calc.min(3, authors.len()),
+        gutter: 1em,
+        ..authors.map(author => align(center)[
+          #block(text(
+            weight: "semibold",
+            author.name
+          ))
+          #text(size: .8em, author.email) \
+          #text(size: .8em, author.affiliation)
+        ]),
+      ),
+    )
+
+    // Abstract (if provided)
+    if abstract != none {
+      rect(
+        width: 100%,
+        fill: rgb(cc-lighter-blue),
+        stroke: (left: 3pt + rgb(cc-accent-blue)),
+        inset: 1.2em,
+        radius: block-radius-value,
+      )[
+        #set par(justify: true)
+        #heading(outlined: false, numbering: none, text(0.85em)[Abstract])
+        #abstract
+        // Keywords (if provided)
+        #if keywords.len() > 0 {
+          v(1em)
+          text(size: 10pt, fill: rgb(cc-light-grey), hyphenate: false)[
+            // A justified keyword line hyphenates inside keywords ("vector-cal-culus").
+            #set par(justify: false)
+            *Keywords:* #keywords.join(", ")
+          ]
+        }
+
+        // The website URL
+        #text(size: 0.9em, fill: rgb(cc-light-grey))[
+          // Justifying a long unbreakable URL leaves wide gaps in the line before it.
+          #set par(justify: false)
+          *Latest Version:* #link(website-url)[#website-url]
+        ]
+      ]
+      v(0.5em)
+    }
+  })
 
   // Content of the paper
-  set par(justify: true)
-  show: columns.with(2, gutter: 1.3em)
+  // A 2-column line holds about 40 characters, too few spaces to justify alone. Letter spacing takes up part of the slack, so lines hyphenate less and gape less.
+  // ponytail: no negative tracking, the website gate measures glyph advances and would see tightened lines cross the column edge.
+  set par(justify: true, justification-limits: (tracking: (min: 0em, max: 0.03em)))
+  set text(costs: (hyphenation: 250%))
 
   body
 
@@ -417,6 +440,19 @@
   ]
 }
 
+// A screenshot over 1500 px wide (5 in at 300 dpi, about 1.5 columns) spans both columns, never below 300 dpi.
+// ponytail: Typst sizes an image by its DPI metadata, so a 144 dpi PNG counts as half its pixels and stays in one column. Strip the metadata to let it span.
+// Rounding down keeps float error from printing at 299.99 dpi. Needs context.
+#let print-width(img) = calc.floor(measure(img).width.pt() * 72 / 300) * 1pt
+#let spanning(img) = layout(page => align(center, box(width: calc.min(print-width(img), page.width), img)))
+
+// The values held in the metadata of `body`, merged into one dictionary.
+#let tagged(body) = if body.func() == metadata and type(body.value) == dictionary {
+  body.value
+} else {
+  body.at("children", default: ()).fold((:), (all, child) => all + tagged(child))
+}
+
 /// render-markdown renders markdown content with support for
 /// callout boxes using the quote function. It uses cmarker's
 /// rendering capabilities with math support via mitex.
@@ -424,9 +460,28 @@
 /// `image-handler` lets the caller resolve image paths from its own project.
 /// -> content
 #let render-markdown(markdown-content, image-handler: image) = {
+  show figure.caption: set align(start)
   cmarker.render(
     markdown-content,
     math: (src, block: false) => mitex(src, block: block, alt: src.trim()),
+    // A captioned image arrives as <figure> around the image and a <figcaption>. A wide one floats with its caption.
+    html: (
+      figcaption: (attrs, body) => metadata((caption: body)),
+      figure: (attrs, body) => {
+        let (img, caption) = tagged(body)
+        context {
+          let wide = print-width(img) >= 5in
+          figure(
+            if wide { spanning(img) } else { img },
+            caption: caption,
+            kind: image,
+            numbering: none,
+            placement: if wide { auto },
+            scope: if wide { "parent" } else { "column" },
+          )
+        }
+      },
+    ),
     scope: (
       quote: cc-quote,
       // cmarker keeps the newline before the closing fence, which zebraw would number as an empty last line.
@@ -441,7 +496,12 @@
           alt != none and alt.trim() != "",
           message: "image \"" + src + "\" has no alt text, write it as ![description](" + src + ")",
         )
-        image-handler(src, alt: alt)
+        let img = image-handler(src, alt: alt)
+        // The metadata hands the image to a <figure>, which lays it out in place of this.
+        metadata((img: img))
+        context if print-width(img) < 5in { img } else {
+          place(auto, float: true, scope: "parent", spanning(img))
+        }
       },
     )
   )
