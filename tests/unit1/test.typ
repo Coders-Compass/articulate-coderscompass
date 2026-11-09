@@ -116,3 +116,17 @@
 // Test that date parameter accepts datetime
 #let test_date = datetime.today()
 #assert.ne(test_date, none)
+
+// Test 13: Markdown images without alt text fail, naming the image
+#assert.eq(
+  catch(() => render-markdown("![](missing.png)")),
+  "assertion failed: image \"missing.png\" has no alt text, write it as ![description](missing.png)",
+)
+#assert.ne(catch(() => render-markdown("<img src=\"logo.png\">")), none)
+#assert.eq(
+  catch(() => render-markdown("![A logo](logo.png)", image-handler: (src, alt: none) => [#src: #alt])),
+  none,
+)
+
+// Test 14: The title is required
+#assert.ne(catch(() => articulate-coderscompass[Body]), none)

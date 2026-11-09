@@ -1,6 +1,6 @@
 #import "@preview/zebraw:0.5.5": zebraw, zebraw-init, zebraw-themes
 #import "@preview/cmarker:0.1.6"
-#import "@preview/mitex:0.2.5": mitex
+#import "@preview/mitex:0.2.7": mitex
 
 // --------------------------------------------------------------
 // Shared constants for the article template and helper functions
@@ -25,8 +25,8 @@
 /// published in by Coders' Compass.
 /// -> content
 #let articulate-coderscompass(
-  /// The paper title
-  title: [Paper Title],
+  /// The paper title. Required.
+  title: none,
 
   /// Optional subtitle for the paper.
   subtitle: none,
@@ -83,6 +83,8 @@
   /// The main content of the paper.
   body
 ) = {
+  assert(title != none, message: "articulate-coderscompass: title is required")
+
   // Basic properties of the document
   set document(
     author: authors.map(a => a.name),
@@ -269,15 +271,9 @@
 
   // Title block with Coders' Compass logo, title, and optional subtitle
   align(center)[
-    #image("../assets/images/cc-icon.png", width: 1cm)
+    #image("../assets/images/cc-icon.png", width: 1cm, alt: "Coders' Compass logo")
     // #v(1em)
-    #block(
-      text(
-        font: headingFont,
-        size: 24pt,
-        title
-      )
-    )
+    #block(std.title(text(font: headingFont, size: 24pt, weight: "regular", title)))
   ]
 
   // Subtitle (if provided)
@@ -419,13 +415,22 @@
 /// render-markdown renders markdown content with support for
 /// callout boxes using the quote function. It uses cmarker's
 /// rendering capabilities with math support via mitex.
+/// Images need alt text in every output mode, not only under PDF/UA-1.
+/// `image-handler` lets the caller resolve image paths from its own project.
 /// -> content
-#let render-markdown(markdown-content) = {
+#let render-markdown(markdown-content, image-handler: image) = {
   cmarker.render(
     markdown-content,
-    math: mitex,
+    math: (src, block: false) => mitex(src, block: block, alt: src.trim()),
     scope: (
-      quote: cc-quote
+      quote: cc-quote,
+      image: (src, alt: none) => {
+        assert(
+          alt != none and alt.trim() != "",
+          message: "image \"" + src + "\" has no alt text, write it as ![description](" + src + ")",
+        )
+        image-handler(src, alt: alt)
+      },
     )
   )
 }

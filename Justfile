@@ -39,5 +39,17 @@ uninstall: (remove "@local")
 # uninstalls the library from the "@preview" prefix (for pre-release testing)
 uninstall-preview: (remove "@preview")
 
+# check the template against PDF/A-3u and PDF/UA-1 with veraPDF
+verapdf:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  . scripts/setup
+  tmp="$(mktemp -d)"
+  trap 'rm -rf "$tmp"' EXIT
+  mkdir -p "$tmp/preview/$PKG_PREFIX"
+  ln -s "{{root}}" "$tmp/preview/$PKG_PREFIX/$VERSION"
+  typst compile --package-path "$tmp" --pdf-standard a-3u,ua-1 template/main.typ "$tmp/main.pdf"
+  for flavour in 3u ua1; do verapdf --flavour "$flavour" --format text --verbose "$tmp/main.pdf"; done
+
 # run ci suite
 ci: test doc

@@ -1,5 +1,5 @@
 # The `articulate-coderscompass` Package
-<div align="center">Version 0.1.7</div>
+<div align="center">Version 0.1.8</div>
 
 Template for a two column article layout for the [Coders' Compass website](https://coderscompass.org). It allows users to write articles in markdown or Typst, which can then be rendered to a PDF suitable for print.
 
@@ -18,7 +18,7 @@ Uses Coders' Compass branding and styling.
 ## Usage
 
 ```typst
-#import "@preview/articulate-coderscompass:0.1.7": *
+#import "@preview/articulate-coderscompass:0.1.8": *
 
 #show: articulate-coderscompass.with(
   title: lorem(15),
@@ -55,6 +55,8 @@ Content here.
 Refer to the [manual](docs/manual.pdf) for detailed documentation on available features and customization options.
 
 You don't have to use the `render-markdown` function. Write Typst directly if you prefer. The reason we use markdown is to have a single manuscript source which can be rendered to both HTML (for the website) and PDF (for print).
+
+Every markdown image needs alt text (`![description](path)`), or compilation fails. Image paths resolve inside the package, so pass your own loader to read images from your project: `#render-markdown(read("content.md"), image-handler: (path, alt: none) => image(path, alt: alt))`. The template compiles to PDF/A-3u and PDF/UA-1 with `typst compile --pdf-standard a-3u,ua-1`, and `just verapdf` checks that with veraPDF.
 
 ## Development
 
