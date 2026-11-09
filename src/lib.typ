@@ -90,18 +90,20 @@
     author: authors.map(a => a.name),
     title: title,
     date: date,
-    keywords: keywords,
+    // pdfinfo prints keywords, so a release check can read the version back from there.
+    keywords: keywords + if version != none { ("version:" + version,) },
     description: abstract,
   )
 
   // Definitions for design elements
+  // Work Sans and Ultra are Latin-only, so Greek and other scripts fall back to Libertinus Serif on purpose.
   let regularFont = if use-brand-fonts {
-    "Work Sans"
+    ("Work Sans", "Libertinus Serif")
   } else {
     "Libertinus Serif"
   }
   let headingFont = if use-brand-fonts {
-    "Ultra"
+    ("Ultra", "Libertinus Serif")
   } else {
     "Libertinus Serif"
   }
@@ -224,6 +226,8 @@
 
   // Main font for the document
   set text(font: regularFont, lang: "en")
+  // Work Sans has no ‣ (U+2023), the default second-level marker, so it would fall back to Libertinus.
+  set list(marker: ([•], [–])) if use-brand-fonts
 
   // Make links underlined to be visible
   show link: underline
@@ -246,10 +250,9 @@
   // ------------
   // Code styling
   // ------------
+  show raw: set text(font: sourceCodeFont)
   // Inline code
-  show raw.where(block: false): it => {
-    text(font: sourceCodeFont, size: 0.9em)[#it]
-  }
+  show raw.where(block: false): it => text(size: 0.9em, it)
 
   // Code blocks use Zebraw for syntax highlighting
   show: zebraw-init.with(
@@ -329,6 +332,8 @@
 
       // The website URL
       #text(size: 0.9em, fill: rgb(cc-light-grey))[
+        // Justifying a long unbreakable URL leaves wide gaps in the line before it.
+        #set par(justify: false)
         *Latest Version:* #link(website-url)[#website-url]
       ]
     ]
@@ -424,6 +429,13 @@
     math: (src, block: false) => mitex(src, block: block, alt: src.trim()),
     scope: (
       quote: cc-quote,
+      // cmarker keeps the newline before the closing fence, which zebraw would number as an empty last line.
+      raw: (text, ..args) => raw(if text.ends-with("\n") { text.slice(0, -1) } else { text }, ..args),
+      // cmarker 0.1.6 passes each <dt>/<dd> pair as an array, which Typst 0.15 deprecates.
+      terms: (..args) => terms(
+        ..args.named(),
+        ..args.pos().map(p => if type(p) == array { terms.item(..p) } else { p }),
+      ),
       image: (src, alt: none) => {
         assert(
           alt != none and alt.trim() != "",

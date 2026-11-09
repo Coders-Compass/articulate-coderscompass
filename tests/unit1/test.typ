@@ -130,3 +130,17 @@
 
 // Test 14: The title is required
 #assert.ne(catch(() => articulate-coderscompass[Body]), none)
+
+// Test 15: The version goes into the PDF keywords, the given keywords stay first
+#articulate-coderscompass(title: "Version Test", keywords: ("a", "b"), version: "1.2.0")[
+  #context assert.eq(document.keywords, ("a", "b", "version:1.2.0"))
+]
+#articulate-coderscompass(title: "No Version Test", keywords: ("a",), version: none)[
+  #context assert.eq(document.keywords, ("a",))
+]
+
+// Test 16: A fenced code block loses the newline before the closing fence, so zebraw numbers no empty last line
+#[
+  #show raw.where(block: true): it => assert.eq(it.text, "echo hi\n")
+  #render-markdown("```bash\necho hi\n\n```")
+]

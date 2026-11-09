@@ -13,7 +13,7 @@ doc:
 
 # run test suite
 test *args:
-  tt run {{ args }}
+  tt run --warnings promote {{ args }}
 
 # update test cases
 update *args:
