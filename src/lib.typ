@@ -1,6 +1,6 @@
 #import "@preview/zebraw:0.5.5": zebraw, zebraw-init, zebraw-themes
 #import "@preview/cmarker:0.1.6"
-#import "@preview/mitex:0.2.7": mitex
+#import "@preview/mitex:0.2.7": mitex, mitex-convert, mitex-scope
 
 // --------------------------------------------------------------
 // Shared constants for the article template and helper functions
@@ -453,6 +453,23 @@
   body.at("children", default: ()).fold((:), (all, child) => all + tagged(child))
 }
 
+// mitex 0.2.7 emits `| x |` with spaces around bare vertical bars; Typst renders
+// those spaces as gaps, so `|x|` spreads instead of hugging like `abs(x)` does
+// (hq task 683). mitex inserts the spaces while converting; stripping them from
+// its output restores the tight bars. Bars emitted as `||` or `|->` carry no
+// spaces and pass through untouched.
+#let tighten-bars(math-src) = (
+  math-src
+    .replace(regex(" +\\|"), "|")
+    .replace(regex("\\| +"), "|")
+)
+
+// Inline `\dfrac`/`\cfrac` set display-style fractions, whose ink lands outside
+// the inline line box and overlaps the adjacent lines (hq task 683). Inline
+// fractions read fine in text style - journals set them that way - so demote
+// them; block equations keep their display style.
+#let demote-inline-display-fracs(latex) = latex.replace(regex("\\\\[dc]frac\\b"), "\\frac")
+
 /// render-markdown renders markdown content with support for
 /// callout boxes using the quote function. It uses cmarker's
 /// rendering capabilities with math support via mitex.
@@ -463,7 +480,11 @@
   show figure.caption: set align(start)
   cmarker.render(
     markdown-content,
-    math: (src, block: false) => mitex(src, block: block, alt: src.trim()),
+    math: (src, block: false) => {
+      let latex = if block { src } else { demote-inline-display-fracs(src) }
+      let math-src = tighten-bars(mitex-convert(latex))
+      math.equation(block: block, eval("$" + math-src + "$", scope: mitex-scope), alt: latex.trim())
+    },
     // A captioned image arrives as <figure> around the image and a <figcaption>. A wide one floats with its caption.
     html: (
       figcaption: (attrs, body) => metadata((caption: body)),

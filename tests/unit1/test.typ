@@ -144,3 +144,18 @@
   #show raw.where(block: true): it => assert.eq(it.text, "echo hi\n")
   #render-markdown("```bash\necho hi\n\n```")
 ]
+
+// Test 17: Inline \dfrac/\cfrac demote to \frac so their ink stays inside the line box
+// (display-style fractions overlap adjacent lines in inline equations, hq task 683)
+#assert.eq(demote-inline-display-fracs("\dfrac{5}{36} + \cfrac{a}{b}"), "\\frac{5}{36} + \\frac{a}{b}")
+#assert.eq(demote-inline-display-fracs("\frac{a}{b}"), "\\frac{a}{b}")
+#assert.eq(demote-inline-display-fracs("\dfracx"), "\\dfracx")
+// Block math keeps its display fracs: the helper is only wired into the inline path.
+#assert.eq(demote-inline-display-fracs(""), "")
+
+// Test 18: mitex's `| x |` output tightens to `|x|`; `||` and `|->` pass through
+// (Typst auto-spaces operators, so the spaces eaten around `+` come back on their own)
+#assert.eq(tighten-bars("| x | + | y|"), "|x|+|y|")
+#assert.eq(tighten-bars("max(| alpha |, | beta |)"), "max(|alpha|,|beta|)")
+#assert.eq(tighten-bars("|-> ||"), "|->||")
+#assert.eq(tighten-bars("lr(| x + y |)"), "lr(|x + y|)")
