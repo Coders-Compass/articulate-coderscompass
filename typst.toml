@@ -4,13 +4,13 @@ version = "0.1.8"
 entrypoint = "src/lib.typ"
 authors = ["Subhomoy Haldar <subhomoy@coderscompass.org>"]
 license = "MIT"
-description = ""
+description = "Two-column article layout for the Coders' Compass website, written in Markdown or Typst."
 homepage = "https://coderscompass.org"
 repository = "https://github.com/Coders-Compass/articulate-coderscompass"
 keywords = ["typst", "coderscompass", "article", "paper"]
 categories = ["paper"]
 disciplines = []
-# compiler = ""
+compiler = "0.15.1"
 exclude = [
     ".github",
     "docs",
